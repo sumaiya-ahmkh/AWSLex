@@ -1,0 +1,28 @@
+service: awslex
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-southeast-2
+  stage: STAGE
+  memorySize: 128
+  timeout: 3
+  endpointType: regional
+
+layers:
+  node_modules:
+    path: ../nodejs
+
+functions:
+  custom-search:
+    handler: custom_search.handler
+    description: GET /tasklambda
+    timeout: 15
+    layers:
+      - { Ref: NodeUnderscoremodulesLambdaLayer }
+  graph-search:
+    handler: graph_search.handler
+    description: GET /tasklambda
+    timeout: 15
+    layers:
+      - { Ref: NodeUnderscoremodulesLambdaLayer }
