@@ -3,18 +3,18 @@ exports.handler = async (event) => {
     // console.log(event);
     try {
         var params = {
-            'query': event.inputTranscript,
+            'query': event.inputTranscript,// search query fetched via input event in LEX
             'limit': 10,
             'indent': true,
-            'key': API - KEY,
+            'key': API - KEY,// API key from google developer's account
         };
 
         let information = '';
-        const linkedinConnect = axios.create({
+        const customConnect = axios.create({
             baseURL: "https://kgsearch.googleapis.com/v1",
             timeout: 5000
         });
-        await linkedinConnect.get(
+        await customConnect.get(
             '/entities:search', {
             params
         })
@@ -34,6 +34,8 @@ exports.handler = async (event) => {
                 information = 'Sorry could not find what you are looking for.';
                 // console.log(error);
             });
+
+        // Response format - to send response to LEX bot
         var obj = { 'sessionAttributes': event['sessionAttributes'] };
         var dialogAction = {};
         dialogAction.type = "Close";

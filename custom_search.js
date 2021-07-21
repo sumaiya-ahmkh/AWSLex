@@ -4,23 +4,22 @@ exports.handler = async (event) => {
     // console.log(event);
     try {
         var params = {
-            'key': API - KEY,
-            'cx': CUSTOMSEARCHID,
-            'q': event.inputTranscript
+            'key': API - KEY, // API key from google developer's account
+            'cx': CUSTOMSEARCHID, //Programmable search engine ID
+            'q': event.inputTranscript // search query fetched via input event in LEX
         };
 
         let information = '';
-        const linkedinConnect = axios.create({
+        const customConnect = axios.create({
             baseURL: "https://www.googleapis.com/customsearch",
             timeout: 5000
         });
-        await linkedinConnect.get(
+        await customConnect.get(
             '/v1', {
             params
         })
             .then(function (response) {
                 // console.log(response);
-                // console.log(JSON.stringify(response.data.items));
                 response.data.items.forEach((element, index, array) => {
                     if (element.hasOwnProperty('htmlTitle')) information += element.htmlTitle + '<br />';
                     if (element.hasOwnProperty('displayLink')) information += '<a href=' + element.displayLink + '>Read more<a><br />';
@@ -32,6 +31,8 @@ exports.handler = async (event) => {
                 information = 'Sorry could not find what you are looking for.';
                 // console.log(error);
             });
+
+        // Response format - to send response to LEX bot
         var obj = { 'sessionAttributes': event['sessionAttributes'] };
         var dialogAction = {};
         dialogAction.type = "Close";
