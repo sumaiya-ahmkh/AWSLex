@@ -20,12 +20,13 @@ exports.handler = async (event) => {
         })
             .then(function (response) {
                 // console.log(response);
+            if (response.data.hasOwnProperty('items') && response.data.items.length) {
                 response.data.items.forEach((element, index, array) => {
-                    if (element.hasOwnProperty('htmlTitle')) information += element.htmlTitle + '<br />';
-                    if (element.hasOwnProperty('displayLink')) information += '<a href=' + element.displayLink + '>Read more<a><br />';
-                    if (element.hasOwnProperty('htmlSnippet')) information += element.htmlSnippet + '<br />';
-                    if (index == array.length - 1 && information == '') information = 'Sorry could not find what you are looking for.';
+                     if (element.hasOwnProperty('title')) information += '<a href=' + element.link + ' target="_blank">' + element.title.substring(0, 80) + '</a><br />';
+                    if (element.hasOwnProperty('snippet')) information += element.snippet + '<br />';
                 });
+            }
+            if (information == '') information = 'Sorry could not find what you are looking for.';
             })
             .catch(function (error) {
                 information = 'Sorry could not find what you are looking for.';
